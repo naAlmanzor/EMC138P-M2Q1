@@ -10,6 +10,8 @@ public class LobbyUI : LobbyManager
 {
     [SerializeField] private TMP_InputField roomName;
     [SerializeField] private TextMeshProUGUI numberOfPlayers;
+
+    [SerializeField] private TextMeshProUGUI roomCode;
     [SerializeField] private Button CreateBtn;
     [SerializeField] private Button JoinBtn;
 
@@ -23,12 +25,22 @@ public class LobbyUI : LobbyManager
         get { return numberOfPlayers.text; }
         set { numberOfPlayers.text = value; }
     }
-    public string RoomName => "Test";
+
+    public string generatedCode;
+    public string RoomName => generatedCode;
 
     private void Awake()
     {
-        CreateBtn.onClick.AddListener(() => StartGame(GameMode.Host));
+        CreateBtn.onClick.AddListener(() => HostGame());
         JoinBtn.onClick.AddListener(() => Debug.Log("Test")); // Change this later to make a new Input Room
+    }
+
+    // Used to generate and host
+    public void HostGame()
+    {
+        GenerateCode();
+        roomCode.text = generatedCode;
+        StartGame(GameMode.Host);
     }
 
     public void CreatePlayers()
@@ -43,5 +55,14 @@ public class LobbyUI : LobbyManager
         }
 
         RoomPanel.SetActive(false);
+    }
+
+    void GenerateCode(){
+        string characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+        for(int i=0; i<8; i++)
+        {
+            generatedCode += characters[UnityEngine.Random.Range(0, characters.Length)];
+        }
+
     }
 }

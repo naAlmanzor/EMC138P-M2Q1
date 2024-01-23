@@ -6,11 +6,14 @@ using Fusion;
 using Fusion.Sockets;
 using System;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public NetworkRunner _runner;
     public NetworkPrefabRef _playerPrefab;
+
+    public int maxCount = 2;
 
     [SerializeField] private LobbyUI UI;
 
@@ -41,6 +44,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             GameMode = mode,
             SessionName = UI.RoomName, // Change this to randomly generate
+            PlayerCount = maxCount,
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
@@ -117,13 +121,13 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             UI.LobbyPanel.SetActive(false);
             UI.RoomPanel.SetActive(true);
-            UI.NumberOfPlayers = runner.ActivePlayers.ToList().Count.ToString();
+            UI.NumberOfPlayers = string.Format("{0}/{1}", runner.ActivePlayers.ToList().Count.ToString(), maxCount.ToString());
         }
         else
         {
             UI.LobbyPanel.SetActive(false);
             UI.RoomPanel.SetActive(true);
-            UI.NumberOfPlayers = runner.ActivePlayers.ToList().Count.ToString();
+            UI.NumberOfPlayers = string.Format("{0}/{1}", runner.ActivePlayers.ToList().Count.ToString(), maxCount.ToString());
         }
 
         UI.StartGameButton.gameObject.SetActive(!runner.IsClient);
@@ -135,7 +139,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             _spawnedCharacters.Remove(player);
         }
-        UI.NumberOfPlayers = runner.ActivePlayers.ToList().Count.ToString();
+        UI.NumberOfPlayers = string.Format("{0}/{1}", runner.ActivePlayers.ToList().Count.ToString(), maxCount.ToString());
     }
 
     public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
