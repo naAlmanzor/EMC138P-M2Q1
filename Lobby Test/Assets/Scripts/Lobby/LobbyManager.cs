@@ -120,17 +120,21 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             UI.LobbyPanel.SetActive(false);
+            UI.InputPanel.SetActive(false);
             UI.RoomPanel.SetActive(true);
             UI.NumberOfPlayers = string.Format("{0}/{1}", runner.ActivePlayers.ToList().Count.ToString(), maxCount.ToString());
         }
         else
         {
             UI.LobbyPanel.SetActive(false);
+            UI.InputPanel.SetActive(false);
             UI.RoomPanel.SetActive(true);
             UI.NumberOfPlayers = string.Format("{0}/{1}", runner.ActivePlayers.ToList().Count.ToString(), maxCount.ToString());
         }
-
+        
         UI.StartGameButton.gameObject.SetActive(!runner.IsClient);
+        UI.roomCode.gameObject.SetActive(!runner.IsClient);
+        UI.waitingText.gameObject.SetActive(runner.IsClient);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
