@@ -8,7 +8,7 @@ public class Player : NetworkBehaviour
     private NetworkCharacterController _cc;
 
     [Networked] private TickTimer delay { get; set; }
-    [SerializeField] private Ball _prefabBall;
+    // [SerializeField] private Ball _prefabBall;
     private Vector3 _forward;
 
     private void Awake()
@@ -23,17 +23,17 @@ public class Player : NetworkBehaviour
             data.direction.Normalize();
             _cc.Move(5 * data.direction * Runner.DeltaTime);
 
-            if (data.direction.sqrMagnitude > 0)
-                _forward = data.direction;
-            if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
-            {
-                if ((data.buttons & NetworkInputData.MOUSEBUTTON1) != 0)
-                {
-                    Runner.Spawn(_prefabBall,
-                    transform.position + _forward, Quaternion.LookRotation(_forward),
-                    Object.InputAuthority);
-                }
-            }
+            // if (data.direction.sqrMagnitude > 0)
+            //     _forward = data.direction;
+            // if (HasStateAuthority && delay.ExpiredOrNotRunning(Runner))
+            // {
+            //     if ((data.buttons & NetworkInputData.MOUSEBUTTON1) != 0)
+            //     {
+            //         Runner.Spawn(_prefabBall,
+            //         transform.position + _forward, Quaternion.LookRotation(_forward),
+            //         Object.InputAuthority);
+            //     }
+            // }
         }
     }
 }

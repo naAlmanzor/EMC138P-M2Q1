@@ -11,6 +11,7 @@ using Unity.VisualScripting;
 public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public NetworkRunner _runner;
+
     public NetworkPrefabRef _playerPrefab;
 
     public int maxCount = 2;
@@ -134,7 +135,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
         UI.StartGameButton.gameObject.SetActive(!runner.IsClient);
         UI.roomCode.gameObject.SetActive(!runner.IsClient);
-        UI.waitingText.gameObject.SetActive(runner.IsClient);
+        UI.EnterGameButton.gameObject.SetActive(runner.IsClient);
+        // UI.waitingText.gameObject.SetActive(runner.IsClient); 
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)

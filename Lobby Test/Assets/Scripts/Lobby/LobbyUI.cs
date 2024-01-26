@@ -5,6 +5,7 @@ using Fusion;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using Palmmedia.ReportGenerator.Core.Parser.Analysis;
 
 public class LobbyUI : LobbyManager
 {
@@ -14,12 +15,16 @@ public class LobbyUI : LobbyManager
     [SerializeField] private Button JoinBtn;
     [SerializeField] private Button RoomBtn;
 
+    [SerializeField] private Button QuitBtn;
+    [SerializeField] public bool hostReady;
+
     public Button StartGameButton;
+    public Button EnterGameButton;
     public TextMeshProUGUI waitingText;
     public TextMeshProUGUI roomCode;
     public GameObject LobbyPanel;
     public GameObject InputPanel;
-    public GameObject RoomPanel;
+    public GameObject RoomPanel; 
 
     public string NumberOfPlayers
     {
@@ -33,15 +38,18 @@ public class LobbyUI : LobbyManager
     private void Awake()
     {
         CreateBtn.onClick.AddListener(() => HostGame());
-        JoinBtn.onClick.AddListener(() => EnterCode()); // Change this later to make a new Input Room
+        JoinBtn.onClick.AddListener(() => EnterCode());
+        QuitBtn.onClick.AddListener(() => Debug.Log("Exit"));
     }
 
     // Used to generate and host
     public void HostGame()
     {
         GenerateCode();
-        roomCode.text = generatedCode;
+        roomCode.text = generatedCode; //generatedCode;
         StartGame(GameMode.Host);
+
+        Debug.Log(generatedCode);
     }
 
     public void EnterCode()
@@ -57,13 +65,18 @@ public class LobbyUI : LobbyManager
     {
         foreach(var player in _runner.ActivePlayers)
         {
-            //// Create a unique position for the player
+            // Create a unique position for the player
             Vector3 spawnPosition = new Vector3((player.RawEncoded % _runner.Config.Simulation.PlayerCount) * 3, 1, 0);
             NetworkObject networkPlayerObject = _runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
         }
 
+        RoomPanel.SetActive(false);
+    }
+
+    public void EnterGame()
+    {
         RoomPanel.SetActive(false);
     }
 
